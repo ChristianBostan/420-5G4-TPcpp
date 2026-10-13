@@ -152,16 +152,27 @@ void Library::displayAllBooks() {
         cout << "Aucun livre dans la bibliothèque.\n";
         return;
     }
-    
+
     cout << "\n=== TOUS LES LIVRES ===\n";
     for (size_t i = 0; i < books.size(); ++i) {
+        Book* book = books[i].get();
+
         cout << "\nLivre " << (i + 1) << " :\n";
-        cout << books[i]->toString() << "\n";
-        if (books [i]->getAvailability()==false){
-            string id = books[i]->getBorrowerId();
-            string name = findUserById(id)->getName();
-            cout << "Emprunteur: " << name << "\n";
-        };
+        cout << "Titre: " << book->getTitle() << "\n";
+        cout << "Auteur: " << book->getAuthor() << "\n";
+        cout << "ISBN: " << book->getISBN() << "\n";
+        cout << "Disponible: "
+             << (book->getAvailability() ? "Oui" : "Non") << "\n";
+
+        if (!book->getAvailability()) {
+            User* borrower = findUserById(book->getBorrowerId());
+
+            if (borrower != nullptr) {
+                cout << "Emprunteur: " << borrower->getName() << "\n";
+            } else {
+                cout << "Emprunteur: utilisateur introuvable\n";
+            }
+        }
 
         cout << "-------------------------\n";
     }

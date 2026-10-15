@@ -114,6 +114,7 @@ int main(int argc, char* argv[]) {
                     Book newBook(title, author, isbn);
                     library.addBook(newBook);
                     cout << "Livre ajouté avec succès !\n";
+                    fileManager.EnregistrerJournal("[AJOUT LIVRE]" + title + " | " + author + " | " + isbn + " | " + to_string(time(nullptr)));
                 }
                 pauseForInput();
                 break;
@@ -167,11 +168,30 @@ int main(int argc, char* argv[]) {
                 break;
             }
             
+
             case 5: // Display All Books
-                library.displayAllBooks();
+                int choixTri;
+
+                cout << "\n=== TRIER LES LIVRES ===\n";
+                cout << "1. Trier par titre\n";
+                cout << "2. Trier par auteur\n";
+                cout << "Votre choix : ";
+                cin >> choixTri;
+
+                if (choixTri == 1) {
+                    library.displayAllBooks(false);
+                }
+                else if (choixTri == 2) {
+                    library.displayAllBooks(true);
+                }
+                else {
+                    cout << "Choix invalide.\n";
+                }
+
                 pauseForInput();
                 break;
-            
+
+
             case 6: // Display Available Books
                 library.displayAvailableBooks();
                 pauseForInput();

@@ -2,12 +2,14 @@
 #include <iostream>
 #include <filesystem>
 #include "filemanager.h"
+#include <ctime>
+#include <iomanip>
 
 using namespace std;
 
 // Constructor
 FileManager::FileManager(const string& booksFile, const string& usersFile)
-    : booksFileName(booksFile), usersFileName(usersFile) {}
+    : booksFileName(booksFile), usersFileName(usersFile), journalFileName("journal.txt") {}
 
 // Save all library data
 bool FileManager::saveLibraryData(Library& library) {
@@ -120,4 +122,25 @@ void FileManager::createBackup() {
     }
     
     cout << "Fichiers de sauvegarde créés.\n";
+}
+
+void FileManager::EnregistrerJournal(const string& action) {
+    ofstream journalFile(journalFileName, ios::app);
+
+    if (!journalFile.is_open()) {
+        cout << "Erreur : Impossible d'ouvrir le fichier journal pour l'écriture.\n";
+        return;
+    }
+
+    // Obtenir la date et l'heure actuelles
+    auto now = chrono::system_clock::now();
+    time_t now_time = chrono::system_clock::to_time_t(now);
+
+    tm local_tm = *localtime(&now_time);
+
+    // Écrire la date, l'heure et l'action dans le journal
+    journalFile << put_time(&local_tm, "%Y-%m-%d %H:%M:%S")
+                << " - " << action << "\n";
+
+    journalFile.close();
 }

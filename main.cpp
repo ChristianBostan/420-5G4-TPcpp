@@ -112,9 +112,12 @@ int main(int argc, char* argv[]) {
                     cout << "Erreur : Un livre avec l'ISBN " << isbn << " existe déjà.\n";
                 } else {
                     Book newBook(title, author, isbn);
-                    library.addBook(newBook);
-                    cout << "Livre ajouté avec succès !\n";
-                    fileManager.EnregistrerJournal("[AJOUT LIVRE]" + title + " | " + author + " | " + isbn + " | " + to_string(time(nullptr)));
+                    if (library.addBook(newBook)) {
+                        cout << "Livre ajouté avec succès !\n";
+                        fileManager.EnregistrerJournal("[AJOUT LIVRE]" + title + " | " + author + " | " + isbn);
+                    } else {
+                        cout << "Erreur : Impossible d'ajouter le livre.\n";
+                    }
                 }
                 pauseForInput();
                 break;

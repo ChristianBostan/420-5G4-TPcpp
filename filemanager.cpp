@@ -125,22 +125,23 @@ void FileManager::createBackup() {
 }
 
 void FileManager::EnregistrerJournal(const string& action) {
-    ofstream journalFile(journalFileName, ios::app);
+    if (booksFileName.empty() || usersFileName.empty()) {
+        cout << "Erreur : Les fichiers de livres ou d'utilisateurs ne sont pas définis.\n";
+        return;
+    }
 
+    ofstream journalFile(journalFileName, ios::app);
     if (!journalFile.is_open()) {
         cout << "Erreur : Impossible d'ouvrir le fichier journal pour l'écriture.\n";
         return;
     }
 
-    // Obtenir la date et l'heure actuelles
-    auto now = chrono::system_clock::now();
-    time_t now_time = chrono::system_clock::to_time_t(now);
+    time_t now = time(nullptr);
+    tm* localTime = localtime(&now);
 
-    tm local_tm = *localtime(&now_time);
-
-    // Écrire la date, l'heure et l'action dans le journal
-    journalFile << put_time(&local_tm, "%Y-%m-%d %H:%M:%S")
-                << " - " << action << "\n";
+    if (localTime != nullptr) {
+        journalFile << "[" << put_time(localTime, "%Y-%m-%d %H:%M:%S") << "] " << action << "\n";
+    }
 
     journalFile.close();
 }

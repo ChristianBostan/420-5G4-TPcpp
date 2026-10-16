@@ -29,4 +29,4 @@ exemple: ofstream journalFile(journalFileName, ios::app);
 
 Cette ligne ouvre le fichier dont le chemin est contenu dans la variable journalFileName, en utilisant la variable journalFile pour le manipuler. Le paramètre ios::app permet d’ajouter le nouveau contenu à la fin du fichier sans effacer les données déjà présentes (append).
 
-2. J'utiliserais une base de donn/es PostgreSQL au lieu de conserver dans des fichiers textes. Postgre est un bon systeme de base de donn/es relationnelles pour manipuloer de grandes quantites de donnees. 
+2. J'utiliserais une base de données PostgreSQL au lieu de conserver les données dans des fichiers texte. PostgreSQL est un bon système de gestion de bases de données relationnelles pour manipuler de grandes quantités de données. De plus, il est beaucoup plus efficace pour gérer un grand nombre de livres grâce à sa capacité à stocker et à organiser de grandes quantités de données.

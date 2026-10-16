@@ -68,8 +68,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    string booksFile;
-    string usersFile;
+    string booksFile = "./data/books.txt";
+    string usersFile = "./data/users.txt";
     if (!dataDir.empty()) {
         if (!filesystem::is_directory(dataDir)) {
             cerr << "Erreur : le répertoire " << dataDir << " n'existe pas.\n";
@@ -112,12 +112,9 @@ int main(int argc, char* argv[]) {
                     cout << "Erreur : Un livre avec l'ISBN " << isbn << " existe déjà.\n";
                 } else {
                     Book newBook(title, author, isbn);
-                    if (library.addBook(newBook)) {
-                        cout << "Livre ajouté avec succès !\n";
-                        fileManager.EnregistrerJournal("[AJOUT LIVRE]" + title + " | " + author + " | " + isbn);
-                    } else {
-                        cout << "Erreur : Impossible d'ajouter le livre.\n";
-                    }
+                    library.addBook(newBook);
+                    cout << "Livre ajouté avec succès !\n";
+                    fileManager.EnregistrerJournal("[AJOUT LIVRE]" + title + " | " + author + " | " + isbn);
                 }
                 pauseForInput();
                 break;
@@ -128,6 +125,7 @@ int main(int argc, char* argv[]) {
                 
                 if (library.removeBook(isbn)) {
                     cout << "Livre supprimé avec succès !\n";
+                    fileManager.EnregistrerJournal("[SUPPRESSION LIVRE]" + isbn+"\n");
                 } else {
                     cout << "Livre non trouvé.\n";
                 }
@@ -210,6 +208,7 @@ int main(int argc, char* argv[]) {
                     User newUser(name, userId);
                     library.addUser(newUser);
                     cout << "Utilisateur ajouté avec succès !\n";
+                    fileManager.EnregistrerJournal("[AJOUT UTILISATEUR]" + userId);
                 }
                 pauseForInput();
                 break;
@@ -226,6 +225,7 @@ int main(int argc, char* argv[]) {
                 
                 if (library.checkOutBook(isbn, userId)) {
                     cout << "Livre emprunté avec succès !\n";
+                    fileManager.EnregistrerJournal("[EMPRUNT]" + isbn);
                 } else {
                     cout << "Erreur : Impossible d'emprunter le livre. Vérifiez l'ISBN, l'ID utilisateur et la disponibilité du livre.\n";
                 }
@@ -238,6 +238,7 @@ int main(int argc, char* argv[]) {
                 
                 if (library.returnBook(isbn)) {
                     cout << "Livre retourné avec succès !\n";
+                    fileManager.EnregistrerJournal("[RETOUR]" + isbn);
                 } else {
                     cout << "Erreur : Impossible de retourner le livre. Vérifiez l'ISBN et que le livre est bien emprunté.\n";
                 }
@@ -257,6 +258,7 @@ int main(int argc, char* argv[]) {
             
             case 12: { // Save Data
                 if (fileManager.saveLibraryData(library)) {
+                    fileManager.EnregistrerJournal("[SAUVEGARDE DONNÉES]");
                     cout << "Données de la bibliothèque sauvegardées avec succès !\n";
                 } else {
                     cout << "Erreur lors de la sauvegarde des données de la bibliothèque.\n";
@@ -267,6 +269,7 @@ int main(int argc, char* argv[]) {
             
             case 13: { // Create Backup
                 fileManager.createBackup();
+                fileManager.EnregistrerJournal("[CRÉATION BACKUP]");
                 pauseForInput();
                 break;
             }
